@@ -8,6 +8,9 @@ Firstly, [DilemmaPrompting](DilemmaPrompting) contains code to run moral dilemma
 Secondly, [LLMQuestionnaire](LLMQuestionnaire) contains code to run the Oxford Utilitarian Scale questionnaire on several LLMs.
 
 See the READMEs in the respective folders for more information.
+Also, for more information feel free to read the [report](./report.pdf).
+
+> Before running remember to install the requirements given in the [requirements.txt](requirements.txt).
 
 ## Usage
 Feel free to extend or use this project for further research. The LLMQuestionnaire is coded such that it can be easily extended to more or other questionnaires.
