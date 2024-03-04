@@ -12,6 +12,23 @@ FILENAME = "questions.csv"
 
 QUESTIONNAIRES = ["OUS"]
 
+MODELS = [
+    "meta-llama/Llama-2-7b-chat-hf",
+    "meta-llama/Llama-2-13b-chat-hf",
+    "georgesung/llama2_7b_chat_uncensored",
+    "Tap-M/Luna-AI-Llama2-Uncensored",
+    "kodonho/SolarM-SakuraSolar-SLERP",
+    "abideen/NexoNimbus-7B",
+    "samir-fama/SamirGPT-v1",
+    "SanjiWatsuki/Lelantos-DPO-7B",
+    "jeonsworld/CarbonVillain-en-10.7B-v1",
+    "bhavinjawade/SOLAR-10B-OrcaDPO-Jawade",
+]
+
+# Replace or add orderings (Sc: Scale, St: Statement, Q: Question) you wish to run.
+ORDERINGS = [["Sc", "St", "Q"]]
+
+SAVE_PATH = "./responses/"
 
 class QuestionnaireDataset(Dataset):
     def __init__(self, csv_file, prompt, questionnaire="OUS"):
@@ -84,7 +101,7 @@ def run_prompt_on_model(
             str(datetime.now()).replace(" ", "-").replace(":", "").replace(".", "")
         )
         filename = (
-            "/home/tobias.kalmbach/Moral-LLMs/LLMQuestionnaire/logs/"
+            SAVE_PATH
             + model_name.replace("/", "")
             + "/"
             + prompt_title
@@ -191,31 +208,15 @@ def generate_prompt(
 
 
 if __name__ == "__main__":
-    models = [
-        "meta-llama/Llama-2-7b-chat-hf",
-        "meta-llama/Llama-2-13b-chat-hf",
-        "georgesung/llama2_7b_chat_uncensored",
-        "Tap-M/Luna-AI-Llama2-Uncensored",
-    ]
-
-    models = [
-        "kodonho/SolarM-SakuraSolar-SLERP",
-        "abideen/NexoNimbus-7B",
-        "samir-fama/SamirGPT-v1",
-        "SanjiWatsuki/Lelantos-DPO-7B",
-        "jeonsworld/CarbonVillain-en-10.7B-v1",
-        "bhavinjawade/SOLAR-10B-OrcaDPO-Jawade",
-    ]
-    orderings = [["Sc", "St", "Q"]]
-    for ordering in orderings:
+    for ordering in ORDERINGS:
         print("Running combination: " + str(ordering))
-        # Go through all combinations
+        # Go through all combinations of prompts
         for parameters in itertools.product([True, False], repeat=5):
             prompt, prompt_title = generate_prompt(
                 ordering, *parameters, title_stub="OUS-"
             )
 
-            for model in models:
+            for model in MODELS:
                 try:
                     run_prompt_on_model(
                         model_name=model, prompt=prompt, prompt_title=prompt_title
